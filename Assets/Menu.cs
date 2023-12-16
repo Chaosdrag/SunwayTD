@@ -20,6 +20,7 @@ public class Menu : MonoBehaviour
     private void OnGUI()
     {
         currencyUI.text = LevelManager.main.IQ.ToString();
+        
     }
 
     public void SetSelected()
