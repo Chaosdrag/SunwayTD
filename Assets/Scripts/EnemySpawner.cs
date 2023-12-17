@@ -75,6 +75,11 @@ public class EnemySpawner : MonoBehaviour
        StartCoroutine(StartWave());
        currentWave++;
     }
+
+    public int GetCurrentWave()
+    {
+        return currentWave;
+    }
     private void SpawnEnemy()
     {
         int index = Random.Range(0, enemyPrefabs.Length);

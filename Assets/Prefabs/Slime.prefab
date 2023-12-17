@@ -210,3 +210,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitPoints: 4
   iQWorth: 75
+  eQWorth: 50
