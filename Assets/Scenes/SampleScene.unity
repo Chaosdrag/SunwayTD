@@ -230,11 +230,15 @@ MonoBehaviour:
     isTrue: 0
   - fact: 25 x 2 - 25 = 25
     isTrue: 1
+  - fact: Coding is a pain in the ass
+    isTrue: 1
   factText: {fileID: 0}
   trueAnswerText: {fileID: 0}
   falseAnswerText: {fileID: 0}
   animator: {fileID: 1712620147}
   timeBetweenQuestions: 1
+  levelManager: {fileID: 1515957153}
+  iqReward: 50
 --- !u!4 &63304555
 Transform:
   m_ObjectHideFlags: 0
@@ -736,6 +740,98 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 11.99, y: 0.99, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &196120511
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 196120514}
+  - component: {fileID: 196120513}
+  - component: {fileID: 196120512}
+  m_Layer: 0
+  m_Name: QuizTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &196120512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 196120511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f54f68a1d6972d4abf2a0cdebb93a77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelManager: {fileID: 1515957153}
+  iqReward: 50
+--- !u!61 &196120513
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 196120511}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
+--- !u!4 &196120514
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 196120511}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -10.52, y: 0.2, z: 2.1527252}
+  m_LocalScale: {x: 1, y: 2.8898437, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -7000,7 +7096,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 319.65604, y: 148.67723}
+  m_SizeDelta: {x: 322.99915, y: 149.4872}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1112073355
 MonoBehaviour:
@@ -8420,8 +8516,10 @@ MonoBehaviour:
   - {fileID: 1562691265}
   - {fileID: 2001074406}
   - {fileID: 1411627694}
+  quizUI: {fileID: 1712620141}
   EQ: 10
   IQ: 100
+  quizIQRewardText: {fileID: 1660247934}
 --- !u!4 &1515957154
 Transform:
   m_ObjectHideFlags: 0
@@ -8450,14 +8548,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefabs:
-  - {fileID: 8959755319857497247, guid: f8c207bbabd73a444a49156fdc815f32, type: 3}
-  - {fileID: 8959755319857497247, guid: f8c207bbabd73a444a49156fdc815f32, type: 3}
-  - {fileID: 8959755319857497247, guid: 41969e2e8fb22e3478687c27d608f553, type: 3}
+  - {fileID: 8959755319857497247, guid: 226cd7e717c90cc4a917525df2d1db8f, type: 3}
   baseEnemies: 8
   enemiesPerSecond: 0.5
   timeBetweenWaves: 5
   difficultyScalingFactor: 0.75
   enemiesPerSecondCap: 15
+  totalWavesToWin: 5
 --- !u!114 &1515957156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9832,6 +9929,8 @@ MonoBehaviour:
   falseAnswerText: {fileID: 1305533055}
   animator: {fileID: 1712620147}
   timeBetweenQuestions: 1
+  levelManager: {fileID: 0}
+  iqReward: 50
 --- !u!95 &1712620147
 Animator:
   serializedVersion: 5
@@ -10427,7 +10526,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 373.55154, y: 148.67723}
+  m_SizeDelta: {x: 376.38742, y: 149.4872}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1959555978
 MonoBehaviour:
@@ -11104,9 +11203,13 @@ PrefabInstance:
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4901136485561871125, guid: f8c207bbabd73a444a49156fdc815f32, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5087529480898871303, guid: f8c207bbabd73a444a49156fdc815f32, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10.59
+      value: -12.27
       objectReference: {fileID: 0}
     - target: {fileID: 5087529480898871303, guid: f8c207bbabd73a444a49156fdc815f32, type: 3}
       propertyPath: m_LocalPosition.y
@@ -11147,6 +11250,14 @@ PrefabInstance:
     - target: {fileID: 8959755319857497247, guid: f8c207bbabd73a444a49156fdc815f32, type: 3}
       propertyPath: m_Name
       value: Goblin
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959755319857497247, guid: f8c207bbabd73a444a49156fdc815f32, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959755319857497247, guid: f8c207bbabd73a444a49156fdc815f32, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11292,3 +11403,4 @@ SceneRoots:
   - {fileID: 1616280285}
   - {fileID: 63304555}
   - {fileID: 337010420}
+  - {fileID: 196120514}

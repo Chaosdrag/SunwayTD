@@ -20,6 +20,10 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private float difficultyScalingFactor = 0.75f;
     [SerializeField] private float enemiesPerSecondCap = 15;
 
+    [Header("Win Condition")]
+    [SerializeField] private int totalWavesToWin = 5;
+    private int wavesCompleted = 0;
+
     private int currentWave = 1;
     private float timeSinceLastSpawn;
     private int enemiesAlive;
@@ -63,6 +67,13 @@ public class EnemySpawner : MonoBehaviour
     private IEnumerator StartWave()
     {
         yield return new WaitForSeconds(timeBetweenWaves);
+
+        if (wavesCompleted >= totalWavesToWin)
+        {
+            WinGame(); //call win condition
+            yield break; // exit method
+        }
+
         isSpawning = true;
         enemiesLeftToSpawn = EnemiesPerWave();
         eps = EnemiesPerSecond();
@@ -70,10 +81,11 @@ public class EnemySpawner : MonoBehaviour
 
     private void EndWave()
     {
-       isSpawning = false;
-       timeSinceLastSpawn = 0f;
-       StartCoroutine(StartWave());
-       currentWave++;
+        isSpawning = false;
+        timeSinceLastSpawn = 0f;
+        currentWave++;
+        wavesCompleted++; // increase completed waves
+        StartCoroutine(StartWave());
     }
 
     public int GetCurrentWave()
@@ -93,6 +105,13 @@ public class EnemySpawner : MonoBehaviour
 
     private float EnemiesPerSecond()
     {
-        return Mathf.Clamp(enemiesPerSecond * Mathf.Pow(currentWave, difficultyScalingFactor),0f,enemiesPerSecond);
+        return Mathf.Clamp(enemiesPerSecond * Mathf.Pow(currentWave, difficultyScalingFactor),0f,enemiesPerSecondCap);
+    }
+
+    private void WinGame()
+    {
+        // display victory screen 
+        Debug.Log("Congratulations! You've won the game!");
+       
     }
 }

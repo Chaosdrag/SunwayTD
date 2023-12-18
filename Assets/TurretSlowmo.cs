@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class TurretSlowmo : MonoBehaviour
 {
@@ -11,52 +9,40 @@ public class TurretSlowmo : MonoBehaviour
 
     [Header("Attribute")]
     [SerializeField] private float targetingRange = 5f;
-    [SerializeField] private float aps = 4f; //attack per second
-    [SerializeField] private float freezeTime = 1f;
+    [SerializeField] private float aps = 4f; // Attack per second
+    [SerializeField] private float slowFactor = 0.5f; // Factor to slow down enemies
+    [SerializeField] private float slowDuration = 1f;
 
     private float timeUntilFire;
 
     private void Update()
     {
-     timeUntilFire += Time.deltaTime;
+        timeUntilFire += Time.deltaTime;
         if (timeUntilFire >= 1f / aps)
-            {
-            Debug.Log("Freeze");
-                FreezeEnemies();
-                timeUntilFire = 0f;
-            }
+        {
+            Debug.Log("Slow");
+            SlowEnemies();
+            timeUntilFire = 0f;
         }
-
-    private void FreezeEnemies()
-    {
-     RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, targetingRange, (Vector2)transform.position, 0f, enemyMask);
-        
-      if (hits.Length > 0)
-      {
-        for (int i = 0; i < hits.Length; i++)
-            {
-                RaycastHit2D hit2D = hits[i];
-
-                EnemyMovement em = hit2D.transform.GetComponent<EnemyMovement>();
-                em.UpdateSpeed(0.5f);
-
-                StartCoroutine(ResetEnemySpeed(em));
-            }
-      }
-
     }
 
-    private IEnumerator ResetEnemySpeed(EnemyMovement em)
+    private void SlowEnemies()
     {
-        yield return new WaitForSeconds(freezeTime);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, targetingRange, enemyMask);
 
-        em.ResetSpeed();
+        foreach (Collider2D hit in hits)
+        {
+            EnemyMovement em = hit.GetComponent<EnemyMovement>();
+            if (em != null)
+            {
+                em.ApplySlow(slowFactor, slowDuration);
+            }
+        }
     }
 
     private void OnDrawGizmosSelected()
     {
-        Handles.color = Color.cyan;
-        Handles.DrawWireDisc(transform.position, transform.forward, targetingRange);
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, targetingRange);
     }
 }
-

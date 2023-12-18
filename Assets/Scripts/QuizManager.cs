@@ -18,6 +18,9 @@ public class QuizManager : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private float timeBetweenQuestions = 1f;
 
+    public LevelManager levelManager;
+    public int iqReward = 50;
+
     void Start()
     {
         if (unansweredQuestions == null || unansweredQuestions.Count == 0)
@@ -46,13 +49,25 @@ public class QuizManager : MonoBehaviour
         }
     }
 
-    IEnumerator TransistionToNextQuestion () 
+    IEnumerator TransitionToNextQuestion()
     {
         unansweredQuestions.Remove(currentQuestion);
 
         yield return new WaitForSeconds(timeBetweenQuestions);
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (unansweredQuestions.Count == 0)
+        {
+            Debug.Log("Re");
+
+            // End the quiz when all questions are answered
+            levelManager.EndQuiz();
+        }
+        else
+        {
+            Debug.Log("Next Question");
+            // Load the next question
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
     public void UserSelectTrue()
@@ -61,13 +76,14 @@ public class QuizManager : MonoBehaviour
         if (currentQuestion.isTrue)
         {
             Debug.Log("Correct");
+            levelManager.IncreaseIQ(iqReward);
         }
         else
         {
             Debug.Log("Wrong");
         }
 
-        StartCoroutine(TransistionToNextQuestion());
+        StartCoroutine(TransitionToNextQuestion());
     }
 
     public void UserSelectFalse()
@@ -76,12 +92,13 @@ public class QuizManager : MonoBehaviour
         if (!currentQuestion.isTrue)
         {
             Debug.Log("Correct");
+            levelManager.IncreaseIQ(iqReward);
         }
         else
         {
             Debug.Log("Wrong");
         }
-        StartCoroutine(TransistionToNextQuestion());
+        StartCoroutine(TransitionToNextQuestion());
     }
 
 }

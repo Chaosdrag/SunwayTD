@@ -39,7 +39,7 @@ public class Tower : MonoBehaviour
 
     private void Update()
     {
-        if (target == null)
+        if (target == null || !target.GetComponent<Health>().isAlive)
         {
             FindTarget();
             return;

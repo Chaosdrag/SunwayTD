@@ -39,6 +39,20 @@ public class EnemyMovement : MonoBehaviour
             }
         }   
     }
+    public void ApplySlow(float factor, float duration)
+    {
+        StartCoroutine(SlowCoroutine(factor, duration));
+    }
+
+    private IEnumerator SlowCoroutine(float factor, float duration)
+    {
+        float originalSpeed = moveSpeed;
+        moveSpeed *= factor;
+
+        yield return new WaitForSeconds(duration);
+
+        moveSpeed = originalSpeed;
+    }
 
     private void FixedUpdate()
     {
