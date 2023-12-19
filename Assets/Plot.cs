@@ -7,8 +7,13 @@ public class Plot : MonoBehaviour
     [Header("References")]
     [SerializeField] private SpriteRenderer sr;
     [SerializeField] private Color hoverColor;
+    [SerializeField] GameObject pauseMenu;
+    [SerializeField] GameObject quizCanvas;
 
-    private GameObject tower;
+    public GameObject towerObj;
+    public Tower tower;
+    public TurretSlowmo wizardTower;
+    public CanonTower canonTower;
     private Color startColor;
 
     private void Start()
@@ -18,7 +23,11 @@ public class Plot : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        sr.color = hoverColor;
+        if (pauseMenu.activeInHierarchy == false && quizCanvas.activeInHierarchy == false) 
+        {
+            sr.color = hoverColor;
+        }
+        
     }
 
     private void OnMouseExit() 
@@ -28,17 +37,50 @@ public class Plot : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (tower != null) return;
-
-        TowerSetting towerToBuild = BuildManager.main.GetSelectedTower();
-        if (towerToBuild.cost > LevelManager.main.IQ)
+        if (UIManager.main.IsHoweringUI())
         {
-            Debug.Log("CAnt afford");
             return;
+        } 
+
+        if (pauseMenu.activeInHierarchy == false && quizCanvas.activeInHierarchy == false)
+        {
+            if (towerObj != null)
+            {
+                // Check the type of tower and open its UI accordingly
+                if (tower != null)
+                {
+                    tower.OpenUpgradeUI();
+                }
+                else if (wizardTower != null)
+                {
+                    wizardTower.OpenUpgradeUI();
+                }
+                else if (canonTower != null)
+                {
+                    canonTower.OpenUpgradeUI();
+                }
+                return;
+            }
+
+            TowerSetting towerToBuild = BuildManager.main.GetSelectedTower();
+            Debug.Log("Tower to build: "+towerToBuild);
+            if (towerToBuild.cost > LevelManager.main.IQ)
+            {
+                Debug.Log("CAnt afford");
+                return;
+            }
+
+            LevelManager.main.SpendIQ(towerToBuild.cost);
+
+            towerObj = Instantiate(towerToBuild.prefab, transform.position, Quaternion.identity);
+
+            // Update tower, wizardTower, and canonTower references based on the type of tower built
+            tower = towerObj.GetComponent<Tower>();
+            wizardTower = towerObj.GetComponent<TurretSlowmo>();
+            canonTower = towerObj.GetComponentInChildren<CanonTower>();
+            Debug.Log("Tower placed!");
+
         }
 
-        LevelManager.main.SpendIQ(towerToBuild.cost);
-
-        tower = Instantiate (towerToBuild.prefab,transform.position,Quaternion.identity);
     }
 }
