@@ -18,9 +18,11 @@ public class TurretSlowmo : MonoBehaviour
     [SerializeField] private float aps = 4f; // Attack per second
     [SerializeField] private float slowFactor = 0.5f; // Factor to slow down enemies
     [SerializeField] private float slowDuration = 1f;
-    [SerializeField] private int baseUpgradeCost = 100;
+    [SerializeField] private int baseUpgradeCost = 200;
     [SerializeField] private int sellValue = 100;
+    [SerializeField] private int maxUpgradeLevel = 5;
 
+    private int currentUpgradeLevel = 1;
 
 
     private float apsBase;
@@ -29,7 +31,6 @@ public class TurretSlowmo : MonoBehaviour
     private float slowFactorBase;
     private float timeUntilFire;
 
-    private int level = 1;
     public Plot plot;
     private void Start()
     {
@@ -79,11 +80,22 @@ public class TurretSlowmo : MonoBehaviour
 
     public void Upgrade()
     {
-        if (CalculateCost() > LevelManager.main.IQ) return;
+        if (currentUpgradeLevel >= maxUpgradeLevel)
+        {
+            // max level reached
+            Debug.Log("Tower has reached the maximum upgrade level.");
+            return;
+        }
+
+        if (CalculateCost() > LevelManager.main.IQ)
+        {
+            Debug.Log("Cannot afford the upgrade.");
+            return;
+        }
 
         LevelManager.main.SpendIQ(CalculateCost());
 
-        level++;
+        currentUpgradeLevel++;
 
         aps = CalculateAPS();
         targetingRange = CalculateRange();
@@ -109,28 +121,28 @@ public class TurretSlowmo : MonoBehaviour
 
     private int CalculateCost()
     {
-        return Mathf.RoundToInt(baseUpgradeCost * Mathf.Pow(level, 0.8f));
+        return Mathf.RoundToInt(baseUpgradeCost * Mathf.Pow(currentUpgradeLevel, 0.8f));
     }
 
     private float CalculateAPS()
     {
-        return apsBase * Mathf.Pow(level, 0.5f);
+        return apsBase * Mathf.Pow(currentUpgradeLevel, 0.5f);
 
     }
     private float CalculateRange()
     {
-        return targetingRangeBase * Mathf.Pow(level, 0.4f);
+        return targetingRangeBase * Mathf.Pow(currentUpgradeLevel, 0.4f);
 
     }
 
     private float CalculateSlowFactor()
     {
-        return slowFactorBase * Mathf.Pow(level, 0.2f);
+        return slowFactorBase * Mathf.Pow(currentUpgradeLevel, 0.2f);
     }
 
     private float CalculateSlowDuration()
     {
-        return slowDurationBase * Mathf.Pow(level, 0.3f);
+        return slowDurationBase * Mathf.Pow(currentUpgradeLevel, 0.3f);
     }
 
     private void OnDrawGizmosSelected()

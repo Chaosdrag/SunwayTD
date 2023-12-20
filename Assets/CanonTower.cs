@@ -16,10 +16,12 @@ public class CanonTower : MonoBehaviour
 
     [Header("Attribute")]
     [SerializeField] private float targetingRange = 5f;
-
     [SerializeField] private float bps = 1f;
     [SerializeField] private int baseUpgradeCost = 300;
     [SerializeField] private int sellValue = 150;
+    [SerializeField] private int maxUpgradeLevel = 5;
+
+    private int currentUpgradeLevel = 1;
 
     private float bpsBase;
     private float targetingRangeBase;
@@ -28,7 +30,7 @@ public class CanonTower : MonoBehaviour
     private float timeUntilFire;
 
     public Plot plot;
-    private int level = 1;
+ 
 
     private void Start()
     {
@@ -97,11 +99,22 @@ public class CanonTower : MonoBehaviour
 
     public void Upgrade()
     {
-        if (CalculateCost() > LevelManager.main.IQ) return;
+        if (currentUpgradeLevel >= maxUpgradeLevel)
+        {
+            // max level reached
+            Debug.Log("Tower has reached the maximum upgrade level.");
+            return;
+        }
+
+        if (CalculateCost() > LevelManager.main.IQ)
+        {
+            Debug.Log("Cannot afford the upgrade.");
+            return;
+        }
 
         LevelManager.main.SpendIQ(CalculateCost());
 
-        level++;
+        currentUpgradeLevel++;
 
         bps = CalculateBPS();
         targetingRange = CalculateRange();
@@ -123,17 +136,17 @@ public class CanonTower : MonoBehaviour
 
     private int CalculateCost()
     {
-        return Mathf.RoundToInt(baseUpgradeCost * Mathf.Pow(level, 0.8f));
+        return Mathf.RoundToInt(baseUpgradeCost * Mathf.Pow(currentUpgradeLevel, 0.8f));
     }
 
     private float CalculateBPS()
     {
-        return bpsBase * Mathf.Pow(level, 0.2f);
+        return bpsBase * Mathf.Pow(currentUpgradeLevel, 0.2f);
 
     }
     private float CalculateRange()
     {
-        return targetingRangeBase * Mathf.Pow(level, 0.3f);
+        return targetingRangeBase * Mathf.Pow(currentUpgradeLevel, 0.3f);
 
     }
 

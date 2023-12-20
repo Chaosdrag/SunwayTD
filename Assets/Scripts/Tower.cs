@@ -21,8 +21,8 @@ public class Tower : MonoBehaviour
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private float bps = 1f;
     [SerializeField] private int baseUpgradeCost = 100;
-    [SerializeField] private int sellValue = 100;
-    [SerializeField] private int maxUpgradeLevel = 3;
+    [SerializeField] private int sellValue = 50;
+    [SerializeField] private int maxUpgradeLevel = 5;
 
     private int currentUpgradeLevel = 1;
 
