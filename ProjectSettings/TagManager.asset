@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - MaterialButtonLayer
+  - MaterialText
+  - CloudSave
+  - MaterialRadioButton
+  - MenuBGM
   layers:
   - Default
   - TransparentFX
@@ -13,8 +18,8 @@ TagManager:
   - UI
   - Enemy
   - Arrow
-  - 
-  - 
+  - Rock
+  - Tower
   - 
   - 
   - 
@@ -42,5 +47,14 @@ TagManager:
     uniqueID: 0
     locked: 0
   - name: Towers
+    uniqueID: 893810505
+    locked: 0
+  - name: TowerSprite
+    uniqueID: 879947945
+    locked: 0
+  - name: TileMap
+    uniqueID: 1012194335
+    locked: 0
+  - name: UI
     uniqueID: 893810505
     locked: 0
