@@ -145,8 +145,7 @@ public class LevelManager : MonoBehaviour
 
         if (EQ == 0)
         {
-            Debug.Log("Game Over");
-            GameOverMenu.isGameOver = true;
+            CallGameOver();
         }
     }
 
@@ -171,6 +170,12 @@ public class LevelManager : MonoBehaviour
             }
             return false;
         }
+    }
+
+    public void CallGameOver() 
+    {
+        Debug.Log("Game Over");
+        GameOverMenu.isGameOver = true;
     }
 
 }

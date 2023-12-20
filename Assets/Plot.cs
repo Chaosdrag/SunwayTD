@@ -74,7 +74,7 @@ public class Plot : MonoBehaviour
 
             towerObj = Instantiate(towerToBuild.prefab, transform.position, Quaternion.identity);
 
-            // Update tower, wizardTower, and canonTower references based on the type of tower built
+            
             tower = towerObj.GetComponent<Tower>();
             wizardTower = towerObj.GetComponent<TurretSlowmo>();
             canonTower = towerObj.GetComponentInChildren<CanonTower>();

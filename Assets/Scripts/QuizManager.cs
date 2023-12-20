@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class QuizManager : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class QuizManager : MonoBehaviour
     public int levelReached;
     private bool isFirstQuizShown = true;
     public bool isLastQuizShown = false;
+    private bool isFailConditionActive = false;
     private int totalQuestions;
     
 
@@ -42,6 +44,7 @@ public class QuizManager : MonoBehaviour
         // initialise subject and levelReached from user's data
         subject = cloudSave.subject;
         levelReached = cloudSave.value;
+
 
         // Initialise questions
         if (unansweredQuestions == null || unansweredQuestions.Count == 0)
@@ -91,6 +94,12 @@ public class QuizManager : MonoBehaviour
 
         yield return new WaitForSeconds(timeBetweenQuestions);
 
+        if (isFailConditionActive) 
+        {
+            levelManager.EndQuiz(true);
+            levelManager.CallGameOver();
+        }
+
         if (isFirstQuizShown)
         {
             if (totalQuestions - unansweredQuestions.Count == 3)
@@ -122,10 +131,16 @@ public class QuizManager : MonoBehaviour
         }
         else
         {
+            if (unansweredQuestions.Count == 1)
+            {
+                isFailConditionActive = true;
+                
+            }
             Debug.Log("Wrong");
         }
 
         StartCoroutine(TransitionToNextQuestion());
+        
     }
 
     public void UserSelectFalse()
@@ -138,9 +153,16 @@ public class QuizManager : MonoBehaviour
         }
         else
         {
+            if (unansweredQuestions.Count == 1)
+            {
+                isFailConditionActive = true;
+            }
             Debug.Log("Wrong");
         }
+
         StartCoroutine(TransitionToNextQuestion());
+  
+        
     }
 
     public void ResetAnimtor() 

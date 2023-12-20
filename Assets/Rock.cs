@@ -10,8 +10,10 @@ public class Rock : MonoBehaviour
     [Header("Attributes")]
     [SerializeField] private float projectileSpeed = 3f;
     [SerializeField] private int projectileDamage = 3;
+    [SerializeField] private float maxLifetime = 3f; // max lifetime of the rock
 
     private Transform target;
+    private float currentLifetime = 0f; // Current lifetime of the rock
 
     public void SetTarget(Transform _target)
     {
@@ -20,7 +22,19 @@ public class Rock : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!target) return;
+        if (!target)
+        {
+            // Increase the current lifetime 
+            currentLifetime += Time.fixedDeltaTime;
+
+            // Check if the rock lifetime has exceeded the maximum lifetime
+            if (currentLifetime >= maxLifetime)
+            {
+                Destroy(gameObject); // Destroy the rock
+            }
+
+            return;
+        }
 
         Vector2 direction = (target.position - transform.position).normalized;
 

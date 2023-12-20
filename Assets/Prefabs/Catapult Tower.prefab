@@ -208,6 +208,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7493445638294375716}
   - component: {fileID: 4466059398715826992}
+  - component: {fileID: 3054719855295222446}
   m_Layer: 0
   m_Name: CatapultSprite
   m_TagString: Untagged
@@ -224,7 +225,7 @@ Transform:
   m_GameObject: {fileID: 2807894631797660919}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.28, z: 0}
+  m_LocalPosition: {x: 0, y: 0.188, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -283,6 +284,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &3054719855295222446
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2807894631797660919}
+  m_Enabled: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1a41d018e66d6674ca0836bea9d98c66, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4254256980337804723
 GameObject:
   m_ObjectHideFlags: 0

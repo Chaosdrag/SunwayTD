@@ -9,11 +9,13 @@ public class EnemySpawner : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private GameObject[] enemyPrefabs;
+    [SerializeField] private GameObject bossPrefab;
 
     [Header("Events")]
     public static UnityEvent onEnemyDestroy = new UnityEvent();
 
     [Header("Attributes")]
+    [SerializeField] private int numberOfBossesInLastWave = 2;
     [SerializeField] private int baseEnemies = 8;
     [SerializeField] private float enemiesPerSecond = 0.5f;
     [SerializeField] private float timeBetweenWaves = 5f;
@@ -30,6 +32,7 @@ public class EnemySpawner : MonoBehaviour
     private int enemiesLeftToSpawn;
     private float eps;//enemies per second
     private bool isSpawning = false;
+    private bool hasBossSpawned = false;
 
     private void Awake()
     {
@@ -41,18 +44,30 @@ public class EnemySpawner : MonoBehaviour
 
     }
     private void Update()
+
     {
+
         if (!isSpawning) return;
 
         timeSinceLastSpawn += Time.deltaTime;
 
         if (timeSinceLastSpawn >= (1f / eps) && enemiesLeftToSpawn > 0)
         {
-
-            SpawnEnemy();
-            enemiesLeftToSpawn--;
-            enemiesAlive++;
-            timeSinceLastSpawn = 0f;
+            if (!hasBossSpawned)
+            {
+                SpawnEnemy();
+                enemiesLeftToSpawn--;
+                enemiesAlive++;
+                timeSinceLastSpawn = 0f;
+            }
+            else 
+            {
+                spawnBoss();
+                enemiesLeftToSpawn--;
+                enemiesAlive++;
+                timeSinceLastSpawn = 0f;
+            }
+            
         }
 
         if (enemiesAlive == 0 && enemiesLeftToSpawn == 0)
@@ -66,8 +81,10 @@ public class EnemySpawner : MonoBehaviour
 
     private void EnemyDestroyed()
     {
-        enemiesAlive--;
+            Debug.Log("Enemy destroyed");
+            enemiesAlive--;
     }
+
     public IEnumerator StartWave()
     {
         Debug.Log("Wave Started!");
@@ -78,10 +95,21 @@ public class EnemySpawner : MonoBehaviour
             WinGame(); //call win condition
             yield break; // exit method
         }
+        else if (wavesCompleted == (totalWavesToWin - 1))
+        {
+            hasBossSpawned = true;
+            isSpawning = true;
+            enemiesLeftToSpawn = numberOfBossesInLastWave;
+        }
+        else 
+        {
+            isSpawning = true;
+            enemiesLeftToSpawn = EnemiesPerWave();
+            eps = EnemiesPerSecond();
+        }
 
-        isSpawning = true;
-        enemiesLeftToSpawn = EnemiesPerWave();
-        eps = EnemiesPerSecond();
+        
+        
     }
 
     private void EndWave()
@@ -137,6 +165,12 @@ public class EnemySpawner : MonoBehaviour
         GameObject prefabToSpawn = enemyPrefabs[index];
 
         Instantiate(prefabToSpawn, LevelManager.main.startPoint.position, Quaternion.identity);
+    }
+
+    private void spawnBoss()
+    {
+        Instantiate(bossPrefab, LevelManager.main.startPoint.position, Quaternion.identity);
+   
     }
     private int EnemiesPerWave()
     {

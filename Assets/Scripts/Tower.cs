@@ -21,7 +21,10 @@ public class Tower : MonoBehaviour
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private float bps = 1f;
     [SerializeField] private int baseUpgradeCost = 100;
-    [SerializeField] private int sellValue = 100; 
+    [SerializeField] private int sellValue = 100;
+    [SerializeField] private int maxUpgradeLevel = 3;
+
+    private int currentUpgradeLevel = 1;
 
     private float bpsBase;
     private float targetingRangeBase;
@@ -30,7 +33,6 @@ public class Tower : MonoBehaviour
     private float timeUntilFire;
 
     public Plot plot;
-    private int level = 1;
 
     private void Start()
     {
@@ -49,7 +51,7 @@ public class Tower : MonoBehaviour
             return;
         }
 
-        RotateTowardsTarget();
+       //RotateTowardsTarget();
 
         if (!CheckTargetIsInRange())
         {
@@ -71,6 +73,7 @@ public class Tower : MonoBehaviour
         GameObject bulletObj = Instantiate(bulletPrefab,firingPoint.position, Quaternion.identity);
         Arrow bulletScript = bulletObj.GetComponent<Arrow>();
         bulletScript.SetTarget(target);
+
     }
 
     private void FindTarget()
@@ -109,12 +112,24 @@ public class Tower : MonoBehaviour
 
     public void Upgrade()
     {
-        if (CalculateCost() > LevelManager.main.IQ) return;
+        if (currentUpgradeLevel >= maxUpgradeLevel)
+        {
+            // max level reached
+            Debug.Log("Tower has reached the maximum upgrade level.");
+            return;
+        }
+
+        if (CalculateCost() > LevelManager.main.IQ)
+        {
+            Debug.Log("Cannot afford the upgrade.");
+            return;
+        }
 
         LevelManager.main.SpendIQ(CalculateCost());
 
-        level++;
+        currentUpgradeLevel++; // increase the upgrade level
 
+        // update  attributes based on the upgrade level
         bps = CalculateBPS();
         targetingRange = CalculateRange();
 
@@ -122,7 +137,13 @@ public class Tower : MonoBehaviour
         Debug.Log("New BPS : " + bps);
         Debug.Log("New Range : " + targetingRange);
         Debug.Log("New Cost : " + CalculateCost());
+        Debug.Log("Upgrade Level: " + currentUpgradeLevel);
 
+        if (currentUpgradeLevel >= maxUpgradeLevel)
+        {
+            // disable upgrades when the maximum upgrade level reached
+            upgradeButton.interactable = false;
+        }
     }
 
     public void SellTower()
@@ -139,17 +160,17 @@ public class Tower : MonoBehaviour
 
     private int CalculateCost()
     {
-        return Mathf.RoundToInt(baseUpgradeCost*Mathf.Pow(level,0.8f));
+        return Mathf.RoundToInt(baseUpgradeCost*Mathf.Pow(currentUpgradeLevel, 0.8f));
     }
 
     private float CalculateBPS()
     {
-        return bpsBase * Mathf.Pow(level, 0.5f);
+        return bpsBase * Mathf.Pow(currentUpgradeLevel, 0.5f);
 
     }
     private float CalculateRange()
     {
-        return targetingRangeBase * Mathf.Pow(level, 0.4f);
+        return targetingRangeBase * Mathf.Pow(currentUpgradeLevel, 0.4f);
 
     }
 

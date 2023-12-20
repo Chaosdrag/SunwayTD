@@ -18,8 +18,8 @@ public class CanonTower : MonoBehaviour
     [SerializeField] private float targetingRange = 5f;
 
     [SerializeField] private float bps = 1f;
-    [SerializeField] private int baseUpgradeCost = 100;
-    [SerializeField] private int sellValue = 100;
+    [SerializeField] private int baseUpgradeCost = 300;
+    [SerializeField] private int sellValue = 150;
 
     private float bpsBase;
     private float targetingRangeBase;
@@ -128,12 +128,12 @@ public class CanonTower : MonoBehaviour
 
     private float CalculateBPS()
     {
-        return bpsBase * Mathf.Pow(level, 0.5f);
+        return bpsBase * Mathf.Pow(level, 0.2f);
 
     }
     private float CalculateRange()
     {
-        return targetingRangeBase * Mathf.Pow(level, 0.4f);
+        return targetingRangeBase * Mathf.Pow(level, 0.3f);
 
     }
 

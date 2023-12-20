@@ -10,8 +10,12 @@ public class Arrow : MonoBehaviour
     [Header("Attributes")]
     [SerializeField] private float bulletSpeed = 5f;
     [SerializeField] private int bulletDamage = 1;
+    [SerializeField] private float maxLifetime = 3f; // max lifetime of the arrow
+
 
     private Transform target;
+    private float currentLifetime = 0f; // Current lifetime of the arrow
+
 
     public void SetTarget(Transform _target)
     {
@@ -20,9 +24,21 @@ public class Arrow : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!target) return;
+        if (!target)
+        {
+            // increase the current lifetime 
+            currentLifetime += Time.fixedDeltaTime;
 
-        Vector2 direction = (target.position-transform.position).normalized;
+            // check if  arrow lifetime has exceeded  maximum lifetime
+            if (currentLifetime >= maxLifetime)
+            {
+                Destroy(gameObject); // destroy  arrow
+            }
+
+            return;
+        }
+
+        Vector2 direction = (target.position - transform.position).normalized;
 
         rb.velocity = direction * bulletSpeed;
     }
@@ -37,5 +53,4 @@ public class Arrow : MonoBehaviour
 
         Destroy(gameObject);
     }
-
 }
